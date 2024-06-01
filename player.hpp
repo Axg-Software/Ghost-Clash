@@ -4,14 +4,8 @@
 typedef struct
 {
     float x, y;
-    int speed_x, speed_y, radius;
+    int speed_x, speed_y, width, height;
 }PlayerInfo;
 
 void Draw(PlayerInfo playerInfo);
 void Update(PlayerInfo* playerInfo);
-
-// Boards
-void DrawBoardOne(PlayerInfo playerInfoBoard1);
-void DrawBoardTwo(PlayerInfo playerInfoBoard2);
-void DrawBoardThree(PlayerInfo playerInfoBoard3);
-void DrawBoardFour(PlayerInfo playerInfoBoard4);

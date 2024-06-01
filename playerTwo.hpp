@@ -4,7 +4,7 @@
 typedef struct
 {
     float x2, y2;
-    int speed_x2, speed_y2, radius2;
+    int speed_x2, speed_y2, width, height;
 }PlayerInfo2;
 
 void Draw(PlayerInfo2 playerInfo2);
