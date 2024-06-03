@@ -69,6 +69,7 @@ class Player2Paddles
     }
 };
 
+// Bullets
 class Player1Bullets
 {
     public:
@@ -88,55 +89,87 @@ class Player1Bullets
     }
 };
 
+class Player2Bullets
+{
+    public:
+    float x, y;
+    int width, height, speed_x, speed_y;
+
+    void DrawP1Bullet()
+    {
+        Texture2D bullet = LoadTexture("assets/images/player2/p2bullet.png");
+        DrawTexture(bullet, x, y, WHITE);
+    }
+
+    void UpdateP1Bullet()
+    {
+        x = x - speed_x;
+        // 3==D
+    }
+};
+
 Player1Paddles player1paddles;
 Player2Paddles player2paddles;
 Player1Bullets player1bullets;
+Player2Bullets player2bullets;
 
 int main () 
 {
     const int screenWidth = 580;
     const int screenHeight = 580;
     bool shot = false;
-    std::string state = "game";
+    bool shot2 = false;
+    std::string state = "menu";
 
-    InitWindow(screenWidth, screenHeight, "Ghost Clash"); // Idk fully about the name yet but we will see :)
+    InitWindow(screenWidth, screenHeight, "Ghost Clash APLHA V0.4.0"); // Idk fully about the name yet but we will see :)
     InitAudioDevice();
     SetTargetFPS(60);
+
+    PlayerInfo playerInfo;
+    playerInfo.speed_x = 7;
+    playerInfo.speed_y = 7;
+    playerInfo.width = 124;
+    playerInfo.height = 148;
+    playerInfo.hitbox = Rectangle{playerInfo.x, playerInfo.y, playerInfo.width, playerInfo.y};
+
+    PlayerInfo2 playerinfo2;
+    playerinfo2.x2 = 150;
+    playerinfo2.speed_x2 = 7;
+    playerinfo2.speed_y2 = 7;
+    playerinfo2.width = 124;
+    playerinfo2.height = 148;
+    playerinfo2.hitbox = Rectangle{playerinfo2.x2, playerinfo2.y2, playerinfo2.width, playerinfo2.height};
 
     while (WindowShouldClose() == false)
     {
         BeginDrawing();
-        ClearBackground(WHITE);
 
         if (state == "game")
         {
             Texture2D backGround = LoadTexture("assets/images/backGround.png");
             DrawTexture(backGround, -16, -19, WHITE);
 
-            // Player one shit
-            PlayerInfo playerInfo;
-            playerInfo.speed_x = 7;
-            playerInfo.speed_y = 7;
-            playerInfo.width = 124;
-            playerInfo.height = 148;
+            // Player one 
+            //playerInfo.radius = 54;
+            Draw(playerInfo);
+            Update(&playerInfo); // WHY DOES THE FIRST PLAYER JUST NOT FUCKING RENDER SOMETIMES IM GOING FERAL
 
-            // Player two shit
-            PlayerInfo2 playerinfo2;
-            playerinfo2.speed_x2 = 7;
-            playerinfo2.speed_y2 = 7;
-            playerinfo2.width = 124;
-            playerinfo2.height = 148;
+            // Player two 
+            Draw(playerinfo2);
+            Update(&playerinfo2);
 
+            // Establish player vars
             Player1Bullets player1bullets;
             player1bullets.speed_x = 16;
             player1bullets.speed_y = 16;
             player1bullets.width = 81;
             player1bullets.height = 27;
 
-            Draw(playerinfo2);
-            Update(&playerinfo2);
-            Draw(playerInfo);
-            Update(&playerInfo);
+            Player2Bullets player2bullets;
+            player2bullets.speed_x = 16;
+            player2bullets.speed_y = 16;
+            player2bullets.width = 81;
+            player2bullets.height = 27;
 
             // Player one shooting shi
             if (IsKeyPressed(KEY_LEFT_SHIFT))
@@ -156,7 +189,25 @@ int main ()
                 player1bullets.y = playerInfo.y + 40;
             }
 
-            // Player one paddle shit
+            // Player two shooting
+            if (IsKeyPressed(KEY_RIGHT_SHIFT))
+            {
+                shot2 = true;
+            }
+            if (shot2 == true)
+            {
+                player2bullets.DrawP1Bullet();
+                player2bullets.UpdateP1Bullet();
+            }
+
+            if (player2bullets.x <= 0) // reset bullet
+            {
+                shot2 = false;
+                player2bullets.x = playerinfo2.x2 - 20;
+                player2bullets.y = playerinfo2.y2 + 40;
+            }
+
+            // Player one paddle 
             if (IsKeyDown(KEY_Z))
             {
                 player1paddles.x = playerInfo.x - 70;
@@ -190,7 +241,7 @@ int main ()
                 player1paddles.DrawPaddleDOWN();
             }
 
-            // Player two paddle shit
+            // Player two paddle 
             if (IsKeyDown(KEY_N))
             {
                 player2paddles.x = playerinfo2.x2 - 70;
@@ -223,8 +274,38 @@ int main ()
                 player2paddles.height = 40;
                 player2paddles.DrawPaddleDOWN();
             }
+
+            //Collison for bullets hitting player
+
+            playerInfo.hitbox = { playerInfo.x, playerInfo.y, static_cast<float>(playerInfo.width), static_cast<float>(playerInfo.height) };
+            playerinfo2.hitbox = { playerinfo2.x2, playerinfo2.y2, static_cast<float>(playerinfo2.width), static_cast<float>(playerinfo2.height) };
+
+            if (CheckCollisionRecs(playerInfo.hitbox, playerinfo2.hitbox))
+            {
+                //CloseWindow();
+            }
+            // I wish collisons in raylib could be like collisions in HaxeFlixel :(
+        }
+        else if (state == "menu")
+        {
+            Texture2D backGround = LoadTexture("assets/images/backGround.png");
+            DrawTexture(backGround, -16, -19, WHITE);
+            Texture2D titleMenu = LoadTexture("assets/images/titleStuff/mainMenu.png");
+            DrawTexture(titleMenu, 4, 135, WHITE);
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                state = "game";
+            }
         }
 
+        if (IsKeyDown(KEY_ESCAPE)) // Procrastinating doing collision
+        {
+            CloseWindow();
+            CloseAudioDevice();
+        }
+
+        ClearBackground(WHITE);
         EndDrawing();
     }
     CloseWindow();

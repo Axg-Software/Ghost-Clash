@@ -3,8 +3,9 @@
 
 typedef struct
 {
-    float x2, y2;
-    int speed_x2, speed_y2, width, height;
+    float x2, y2, width, height;
+    int speed_x2, speed_y2;
+    Rectangle hitbox = Rectangle{x2, y2, width, height};
 }PlayerInfo2;
 
 void Draw(PlayerInfo2 playerInfo2);
