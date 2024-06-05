@@ -24,6 +24,6 @@ Writen by [Axuko](https://github.com/Ethan-makes-music)
 ### Removed
 - Some unused code
 
-## V0.1
+## V0.1 - 5-31-24
 ### Added
 - VERY VERY early prototype of the game (basically just movement)
