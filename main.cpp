@@ -8,8 +8,9 @@ using namespace std;
 class Player1Paddles
 {
     public:
-    float x, y;
-    int width, height;
+    float x, y, width, height;
+    Rectangle hitbox = Rectangle{x, y, width, height};
+    bool active;
 
     // All paddles for player 1
     void DrawPaddleUP()
@@ -40,8 +41,9 @@ class Player1Paddles
 class Player2Paddles
 {
     public:
-    float x, y;
-    int width, height;
+    float x, y, width, height;
+    Rectangle hitbox = Rectangle{x, y, width, height};
+    bool active;
 
     // All paddles for player 2
     void DrawPaddleUP()
@@ -73,8 +75,10 @@ class Player2Paddles
 class Player1Bullets
 {
     public:
-    float x, y;
-    int width, height, speed_x, speed_y;
+    float x, y, width, height;
+    int speed_x, speed_y;
+    Rectangle hitbox = Rectangle{x, y, width, height};
+    bool active;
 
     void DrawP1Bullet()
     {
@@ -92,8 +96,10 @@ class Player1Bullets
 class Player2Bullets
 {
     public:
-    float x, y;
-    int width, height, speed_x, speed_y;
+    float x, y, width, height;
+    int speed_x, speed_y;
+    Rectangle hitbox = Rectangle{x, y, width, height};
+    bool active;
 
     void DrawP1Bullet()
     {
@@ -121,7 +127,7 @@ int main ()
     bool shot2 = false;
     std::string state = "menu";
 
-    InitWindow(screenWidth, screenHeight, "Ghost Clash APLHA V0.4.0"); // Idk fully about the name yet but we will see :)
+    InitWindow(screenWidth, screenHeight, "Ghost Clash APLHA V0.5.0"); // Idk fully about the name yet but we will see :)
     InitAudioDevice();
     SetTargetFPS(60);
 
@@ -178,13 +184,15 @@ int main ()
             }
             if (shot == true)
             {
+                player1bullets.active = true;
                 player1bullets.DrawP1Bullet();
                 player1bullets.UpdateP1Bullet();
             }
 
-            if (player1bullets.x <= 0)
+            if (player1bullets.x <= 0 || CheckCollisionRecs(player2paddles.hitbox, player1bullets.hitbox) && player2paddles.active == true)
             {
                 shot = false;
+                player1bullets.active = false;
                 player1bullets.x = playerInfo.x - 20;
                 player1bullets.y = playerInfo.y + 40;
             }
@@ -196,13 +204,15 @@ int main ()
             }
             if (shot2 == true)
             {
+                player2bullets.active = true;
                 player2bullets.DrawP1Bullet();
                 player2bullets.UpdateP1Bullet();
             }
 
-            if (player2bullets.x <= 0) // reset bullet
+            if (player2bullets.x <= 0 || CheckCollisionRecs(player1paddles.hitbox, player2bullets.hitbox) && player1paddles.active == true) // reset bullet
             {
                 shot2 = false;
+                player2bullets.active = false;
                 player2bullets.x = playerinfo2.x2 - 20;
                 player2bullets.y = playerinfo2.y2 + 40;
             }
@@ -215,6 +225,7 @@ int main ()
                 player1paddles.width = 40;
                 player1paddles.height = 153;
                 player1paddles.DrawPaddleLEFT();
+                player1paddles.active = true;
             }
             else if (IsKeyDown(KEY_X))
             {
@@ -223,6 +234,7 @@ int main ()
                 player1paddles.width = 40;
                 player1paddles.height = 153;
                 player1paddles.DrawPaddleRIGHT();
+                player1paddles.active = true;
             }
             else if (IsKeyDown(KEY_C))
             {
@@ -231,6 +243,7 @@ int main ()
                 player1paddles.width = 153;
                 player1paddles.height = 40;
                 player1paddles.DrawPaddleUP();
+                player1paddles.active = true;
             }
             else if (IsKeyDown(KEY_V))
             {
@@ -239,6 +252,11 @@ int main ()
                 player1paddles.width = 153;
                 player1paddles.height = 40;
                 player1paddles.DrawPaddleDOWN();
+                player1paddles.active = true;
+            }
+            else
+            {
+                player1paddles.active = false;
             }
 
             // Player two paddle 
@@ -249,6 +267,7 @@ int main ()
                 player2paddles.width = 40;
                 player2paddles.height = 153;
                 player2paddles.DrawPaddleLEFT();
+                player2paddles.active = true;
             }
             else if (IsKeyDown(KEY_M))
             {
@@ -257,14 +276,16 @@ int main ()
                 player2paddles.width = 40;
                 player2paddles.height = 153;
                 player2paddles.DrawPaddleRIGHT();
+                player2paddles.active = true;
             }
             else if (IsKeyDown(KEY_COMMA))
             {
                 player2paddles.x = playerinfo2.x2 - 10;
                 player2paddles.y = playerinfo2.y2 - 50;
-                player2paddles.width = 153;
+                player2paddles.width = 153; 
                 player2paddles.height = 40;
                 player2paddles.DrawPaddleUP();
+                player2paddles.active = true;
             }
             else if (IsKeyDown(KEY_PERIOD))
             {
@@ -273,16 +294,28 @@ int main ()
                 player2paddles.width = 153;
                 player2paddles.height = 40;
                 player2paddles.DrawPaddleDOWN();
+                player2paddles.active = true;
+            }
+            else
+            {
+                player2paddles.active = false;
             }
 
-            //Collison for bullets hitting player
-
+            // Update hitbox positions
             playerInfo.hitbox = { playerInfo.x, playerInfo.y, static_cast<float>(playerInfo.width), static_cast<float>(playerInfo.height) };
             playerinfo2.hitbox = { playerinfo2.x2, playerinfo2.y2, static_cast<float>(playerinfo2.width), static_cast<float>(playerinfo2.height) };
+            player1paddles.hitbox = { player1paddles.x, player1paddles.y, static_cast<float>(player1paddles.width), static_cast<float>(player1paddles.height) };
+            player2paddles.hitbox = { player2paddles.x, player2paddles.y, static_cast<float>(player2paddles.width), static_cast<float>(player2paddles.height) };
+            player1bullets.hitbox = { player1bullets.x, player1bullets.y, static_cast<float>(player1bullets.width), static_cast<float>(player1bullets.height) };
+            player2bullets.hitbox = { player2bullets.x, player2bullets.y, static_cast<float>(player2bullets.width), static_cast<float>(player2bullets.height) };
 
-            if (CheckCollisionRecs(playerInfo.hitbox, playerinfo2.hitbox))
+            if (CheckCollisionRecs(playerInfo.hitbox, player2bullets.hitbox) && player2bullets.active == true)
             {
-                //CloseWindow();
+                state = "dead";
+            }
+            else if (CheckCollisionRecs(playerinfo2.hitbox, player1bullets.hitbox) && player1bullets.active == true)
+            {
+                state = "dead";
             }
             // I wish collisons in raylib could be like collisions in HaxeFlixel :(
         }
@@ -296,6 +329,13 @@ int main ()
             if (IsKeyPressed(KEY_ENTER))
             {
                 state = "game";
+            }
+        }
+        else if (state == "dead")
+        {
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                state = "menu";
             }
         }
 

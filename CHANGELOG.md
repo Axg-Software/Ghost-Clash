@@ -1,6 +1,14 @@
 # Ghost clash changelog
 Writen by [Axuko](https://github.com/Ethan-makes-music)
 
+## V0.5 - 6-8-24
+### Added
+- Game loop (game is now actually playable)
+- Full collision
+- Very early dead screen
+### Fixed
+- Bullet would still dissapear when paddles werent rendered
+
 ## V0.4 - 6-3-24
 ### Added
 - Main menu
