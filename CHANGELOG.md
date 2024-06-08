@@ -15,7 +15,6 @@ Writen by [Axuko](https://github.com/Ethan-makes-music)
 - Bullets for player 2
 - When you press escape the game closes
 - Collision for Player 1 and player 2
-- When you press esc it closes the game
 ### Fixed
 - Bug where player 1 just wouldent render sometimes
 
