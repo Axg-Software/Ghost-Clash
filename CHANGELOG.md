@@ -6,7 +6,6 @@ Writen by [Axuko](https://github.com/Ethan-makes-music)
 - Full deathscreen
 - Different death screens depending on who dies
 - Sound effects
-- Music - IN PROGESS (by sami) (TODO)
 - Make bullets face any direction
 - Added Score
 ### Changed
