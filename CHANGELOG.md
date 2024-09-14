@@ -1,6 +1,21 @@
 # Ghost clash changelog
 Writen by [Axuko](https://github.com/Ethan-makes-music)
 
+## V1.0 (FULL RELEASE!) - 9-13-24
+### Added
+- Full deathscreen
+- Different death screens depending on who dies
+- Sound effects
+- Music - IN PROGESS (by sami) (TODO)
+- Make bullets face any direction
+- Added Score
+### Changed
+- Changed fps to 128
+- Spawn location for YELLOW PLR
+### Fixed
+- Being able to die from bullets after the round ends
+
+
 ## V0.5 - 6-8-24
 ### Added
 - Game loop (game is now actually playable)
@@ -15,6 +30,7 @@ Writen by [Axuko](https://github.com/Ethan-makes-music)
 - Bullets for player 2
 - When you press escape the game closes
 - Collision for Player 1 and player 2
+- When you press esc it closes the game
 ### Fixed
 - Bug where player 1 just wouldent render sometimes
 

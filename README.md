@@ -1,15 +1,25 @@
 # Ghost Clash
-This is a game im going to be working on for a little bit.
-My goal for this game is to be a fun co-op where you can get a friend and 1v1 each other.
-You would fight by shooting each other, and you can block by using a key that would make a temp wall in front of you!
-Which would get deleted 5 - 10 sec later.
+Ghost Clash is a 2 Player Co-op game where you face one other friend and you guys fight while trying to block the bullets with
+your buildable walls!
+
+## How to play
+- For RED player:
+    - WASD to move.
+    - LEFT SHIFT to shoot.
+    - ZXCV to build.
+
+- For YELLOW player:
+    - Arrow Keys to move.
+    - RIGHT SHIFT to shoot.
+    - NM,. to build.
 
 ## Details
 Engine im using: Raylib.
 
 Name for the game: Ghost Clash.
 
-Percent complete: 75%.
+Percent complete: 60%.
 
 ## Credits
-- Axuko: Everything lol
+- Axuko: Coding, Art, Sfx
+- SamiCLN: Music

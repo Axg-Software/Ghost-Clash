@@ -79,17 +79,51 @@ class Player1Bullets
     int speed_x, speed_y;
     Rectangle hitbox = Rectangle{x, y, width, height};
     bool active;
+    bool left;
+    bool right;
+    bool up;
+    bool down;
 
     void DrawP1Bullet()
     {
-        Texture2D bullet = LoadTexture("assets/images/player1/p1bullet.png");
+        Texture2D bullet; //= LoadTexture("assets/images/player1/p1bullet.png");
+        if (left == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player1/p1bullet.png");
+        }
+        else if (right == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player1/p1bullet.png");
+        }
+        else if (up == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player1/p1bulletUD.png");
+        }
+        else if (down == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player1/p1bulletUD.png");
+        }
         DrawTexture(bullet, x, y, WHITE);
     }
 
     void UpdateP1Bullet()
     {
-        x = x - speed_x;
-        // 3==D
+        if (left == true && active == true)
+        {
+            x = x - speed_x;
+        }
+        else if (right == true && active == true)
+        {
+            x = x + speed_x;
+        }
+        else if (up == true && active == true)
+        {
+            y = y - speed_y;
+        }
+        else if (down == true && active == true)
+        {
+            y = y + speed_y;
+        }
     }
 };
 
@@ -100,16 +134,51 @@ class Player2Bullets
     int speed_x, speed_y;
     Rectangle hitbox = Rectangle{x, y, width, height};
     bool active;
+    bool left;
+    bool right;
+    bool up;
+    bool down;
 
     void DrawP1Bullet()
     {
-        Texture2D bullet = LoadTexture("assets/images/player2/p2bullet.png");
+        Texture2D bullet; //= LoadTexture("assets/images/player2/p2bullet.png");
+        if (left == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player2/p2bullet.png");
+        }
+        else if (right == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player2/p2bullet.png");
+        }
+        else if (up == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player2/p2bulletUD.png");
+        }
+        else if (down == true && active == true)
+        {
+            bullet = LoadTexture("assets/images/player2/p2bulletUD.png");
+        }
         DrawTexture(bullet, x, y, WHITE);
     }
 
     void UpdateP1Bullet()
     {
-        x = x - speed_x;
+        if (left == true && active == true)
+        {
+            x = x - speed_x;
+        }
+        else if (right == true && active == true)
+        {
+            x = x + speed_x;
+        }
+        else if (up == true && active == true)
+        {
+            y = y - speed_y;
+        }
+        else if (down == true && active == true)
+        {
+            y = y + speed_y;
+        }
         // 3==D
     }
 };
@@ -127,23 +196,31 @@ int main ()
     bool shot2 = false;
     std::string state = "menu";
 
-    InitWindow(screenWidth, screenHeight, "Ghost Clash APLHA V0.5.0"); // Idk fully about the name yet but we will see :)
+    InitWindow(screenWidth, screenHeight, "Ghost Clash V1.0"); // Idk fully about the name yet but we will see :)
     InitAudioDevice();
-    SetTargetFPS(60);
+
+    Sound select = LoadSound("assets/sounds/pickupCoin.wav");
+    Sound dead = LoadSound("assets/sounds/explosion.wav");
+    Sound shoot = LoadSound("assets/sounds/laserShoot.wav");
+
+    SetTargetFPS(120);
 
     PlayerInfo playerInfo;
     playerInfo.speed_x = 7;
     playerInfo.speed_y = 7;
     playerInfo.width = 124;
     playerInfo.height = 148;
+    playerInfo.score = 0;
     playerInfo.hitbox = Rectangle{playerInfo.x, playerInfo.y, playerInfo.width, playerInfo.y};
 
     PlayerInfo2 playerinfo2;
-    playerinfo2.x2 = 150;
+    playerinfo2.x2 = 350;
+    playerinfo2.y2 = 250;
     playerinfo2.speed_x2 = 7;
     playerinfo2.speed_y2 = 7;
     playerinfo2.width = 124;
     playerinfo2.height = 148;
+    playerinfo2.score = 0;
     playerinfo2.hitbox = Rectangle{playerinfo2.x2, playerinfo2.y2, playerinfo2.width, playerinfo2.height};
 
     while (WindowShouldClose() == false)
@@ -156,9 +233,8 @@ int main ()
             DrawTexture(backGround, -16, -19, WHITE);
 
             // Player one 
-            //playerInfo.radius = 54;
             Draw(playerInfo);
-            Update(&playerInfo); // WHY DOES THE FIRST PLAYER JUST NOT FUCKING RENDER SOMETIMES IM GOING FERAL
+            Update(&playerInfo);
 
             // Player two 
             Draw(playerinfo2);
@@ -176,11 +252,15 @@ int main ()
             player2bullets.speed_y = 16;
             player2bullets.width = 81;
             player2bullets.height = 27;
-
             // Player one shooting shi
+
+            DrawText(TextFormat("Plr1 Score: %i", playerInfo.score), 30, 0, 32, BLACK);
+            DrawText(TextFormat("Plr 2 Score: %i", playerinfo2.score), 270, 0, 32, BLACK);
+
             if (IsKeyPressed(KEY_LEFT_SHIFT))
             {
                 shot = true;
+                PlaySound(shoot);
             }
             if (shot == true)
             {
@@ -189,7 +269,8 @@ int main ()
                 player1bullets.UpdateP1Bullet();
             }
 
-            if (player1bullets.x <= 0 || CheckCollisionRecs(player2paddles.hitbox, player1bullets.hitbox) && player2paddles.active == true)
+            if (player1bullets.x <= 0 || CheckCollisionRecs(player2paddles.hitbox, player1bullets.hitbox) && player2paddles.active == true || player1bullets.y <= 0
+            || player1bullets.y >= 590 || player1bullets.x >= 590 && state == "game")
             {
                 shot = false;
                 player1bullets.active = false;
@@ -201,6 +282,7 @@ int main ()
             if (IsKeyPressed(KEY_RIGHT_SHIFT))
             {
                 shot2 = true;
+                PlaySound(shoot);
             }
             if (shot2 == true)
             {
@@ -209,7 +291,8 @@ int main ()
                 player2bullets.UpdateP1Bullet();
             }
 
-            if (player2bullets.x <= 0 || CheckCollisionRecs(player1paddles.hitbox, player2bullets.hitbox) && player1paddles.active == true) // reset bullet
+            if (player2bullets.x <= 0 || CheckCollisionRecs(player1paddles.hitbox, player2bullets.hitbox) && player1paddles.active == true || player2bullets.y <= 0
+            || player2bullets.y >= 590 || player2bullets.x >= 590 && state == "game") // reset bullet
             {
                 shot2 = false;
                 player2bullets.active = false;
@@ -301,6 +384,65 @@ int main ()
                 player2paddles.active = false;
             }
 
+            // Update bullet directions
+            if (IsKeyPressed(KEY_W) && player1bullets.active == false)
+            {
+                player1bullets.up = true;
+                player1bullets.down = false;
+                player1bullets.left = false;
+                player1bullets.right = false;
+            }
+            else if (IsKeyPressed(KEY_S) && player1bullets.active == false)
+            {
+                player1bullets.up = false;
+                player1bullets.down = true;
+                player1bullets.left = false;
+                player1bullets.right = false;
+            }
+            else if (IsKeyPressed(KEY_A) && player1bullets.active == false)
+            {
+                player1bullets.up = false;
+                player1bullets.down = false;
+                player1bullets.left = true;
+                player1bullets.right = false;
+            }
+            else if (IsKeyPressed(KEY_D) && player1bullets.active == false)
+            {
+                player1bullets.up = false;
+                player1bullets.down = false;
+                player1bullets.left = false;
+                player1bullets.right = true;
+            }
+
+            if (IsKeyPressed(KEY_UP) && player2bullets.active == false)
+            {
+                player2bullets.up = true;
+                player2bullets.down = false;
+                player2bullets.left = false;
+                player2bullets.right = false;
+            }
+            else if (IsKeyPressed(KEY_DOWN) && player2bullets.active == false)
+            {
+                player2bullets.up = false;
+                player2bullets.down = true;
+                player2bullets.left = false;
+                player2bullets.right = false;
+            }
+            else if (IsKeyPressed(KEY_LEFT) && player2bullets.active == false)
+            {
+                player2bullets.up = false;
+                player2bullets.down = false;
+                player2bullets.left = true;
+                player2bullets.right = false;
+            }
+            else if (IsKeyPressed(KEY_RIGHT) && player2bullets.active == false)
+            {
+                player2bullets.up = false;
+                player2bullets.down = false;
+                player2bullets.left = false;
+                player2bullets.right = true;
+            }
+
             // Update hitbox positions
             playerInfo.hitbox = { playerInfo.x, playerInfo.y, static_cast<float>(playerInfo.width), static_cast<float>(playerInfo.height) };
             playerinfo2.hitbox = { playerinfo2.x2, playerinfo2.y2, static_cast<float>(playerinfo2.width), static_cast<float>(playerinfo2.height) };
@@ -311,12 +453,25 @@ int main ()
 
             if (CheckCollisionRecs(playerInfo.hitbox, player2bullets.hitbox) && player2bullets.active == true)
             {
-                state = "dead";
+                PlaySound(dead);
+                player2bullets.active = false;
+                player1bullets.x = 0;
+                player2bullets.x = 0;
+                player1bullets.y = 0;
+                player2bullets.y = 0;
+                state = "dead1";
             }
             else if (CheckCollisionRecs(playerinfo2.hitbox, player1bullets.hitbox) && player1bullets.active == true)
             {
-                state = "dead";
+                PlaySound(dead);
+                player2bullets.active = false;
+                player1bullets.x = 0;
+                player2bullets.x = 0;
+                player1bullets.y = 0;
+                player2bullets.y = 0;
+                state = "dead2";
             }
+
             // I wish collisons in raylib could be like collisions in HaxeFlixel :(
         }
         else if (state == "menu")
@@ -328,13 +483,52 @@ int main ()
 
             if (IsKeyPressed(KEY_ENTER))
             {
+                PlaySound(select);
                 state = "game";
             }
         }
-        else if (state == "dead")
+        else if (state == "dead1")
         {
+            player1bullets.x = 0;
+            player2bullets.x = 0;
+            player1bullets.y = 0;
+            player2bullets.y = 0;
+
+            Texture2D backGround = LoadTexture("assets/images/backGround.png");
+            DrawTexture(backGround, -16, -19, WHITE);
+            Texture2D plr1Dead = LoadTexture("assets/images/deathScreen/plr1dead.png");
+            DrawTexture(plr1Dead, 0, 191, WHITE);
+            playerInfo.x = 300;
+            playerInfo.y = 0;
+            playerinfo2.x2 = 350;
+            playerinfo2.y2 = 250;
+
             if (IsKeyPressed(KEY_ENTER))
             {
+                PlaySound(select);
+                playerinfo2.score = playerinfo2.score + 1;
+                state = "menu";
+            }
+        }
+        else if (state == "dead2")
+        {
+            player1bullets.x = 0;
+            player2bullets.x = 0;
+            player1bullets.y = 0;
+            player2bullets.y = 0;
+            Texture2D backGround = LoadTexture("assets/images/backGround.png");
+            DrawTexture(backGround, -16, -19, WHITE);
+            Texture2D plr2Dead = LoadTexture("assets/images/deathScreen/plr2dead.png");
+            DrawTexture(plr2Dead, 0, 191, WHITE);
+            playerInfo.x = 300;
+            playerInfo.y = 0;
+            playerinfo2.x2 = 350;
+            playerinfo2.y2 = 250;
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                PlaySound(select);
+                playerInfo.score = playerInfo.score + 1;
                 state = "menu";
             }
         }

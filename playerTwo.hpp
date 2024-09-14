@@ -4,7 +4,7 @@
 typedef struct
 {
     float x2, y2, width, height;
-    int speed_x2, speed_y2;
+    int speed_x2, speed_y2, score;
     Rectangle hitbox = Rectangle{x2, y2, width, height};
 }PlayerInfo2;
 
