@@ -192,11 +192,12 @@ int main ()
 {
     const int screenWidth = 580;
     const int screenHeight = 580;
+    int bestTo = 3;
     bool shot = false;
     bool shot2 = false;
     std::string state = "menu";
 
-    InitWindow(screenWidth, screenHeight, "Ghost Clash V1.0"); // Idk fully about the name yet but we will see :)
+    InitWindow(screenWidth, screenHeight, "Ghost Clash V1.1"); // Idk fully about the name yet but we will see :)
     InitAudioDevice();
 
     Sound select = LoadSound("assets/sounds/pickupCoin.wav");
@@ -252,7 +253,16 @@ int main ()
             player2bullets.speed_y = 16;
             player2bullets.width = 81;
             player2bullets.height = 27;
+
             // Player one shooting shi
+            if (playerInfo.score == bestTo)
+            {
+                state = "win1";
+            }
+            else if (playerinfo2.score == bestTo)
+            {
+                state = "win2";
+            }
 
             DrawText(TextFormat("Plr1 Score: %i", playerInfo.score), 30, 0, 32, BLACK);
             DrawText(TextFormat("Plr 2 Score: %i", playerinfo2.score), 270, 0, 32, BLACK);
@@ -486,6 +496,16 @@ int main ()
                 PlaySound(select);
                 state = "game";
             }
+            else if (IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyPressed(KEY_RIGHT_SHIFT))
+            {
+                PlaySound(select);
+                state = "options";
+            }
+            else if (IsKeyPressed(KEY_C))
+            {
+                PlaySound(select);
+                state = "credits";
+            }
         }
         else if (state == "dead1")
         {
@@ -529,6 +549,84 @@ int main ()
             {
                 PlaySound(select);
                 playerInfo.score = playerInfo.score + 1;
+                state = "menu";
+            }
+        }
+        else if (state == "options")
+        {
+            Texture2D backGround = LoadTexture("assets/images/backGround.png");
+            DrawTexture(backGround, -16, -19, WHITE);
+            Texture2D optionsHEADER = LoadTexture("assets/images/titleStuff/options.png");
+            DrawTexture(optionsHEADER, 17, 0, WHITE);
+            Texture2D bestToS =  LoadTexture("assets/images/titleStuff/bestTO.png");
+            DrawTexture(bestToS, 25, 113, WHITE);
+
+            if (bestTo == 3)
+            {
+                Texture2D bestTo3 = LoadTexture("assets/images/numbers/bestTo3.png");
+                DrawTexture(bestTo3, 274, 113, WHITE);
+            }
+            else if (bestTo == 10)
+            {
+                Texture2D bestTo10 = LoadTexture("assets/images/numbers/bestTo10.png");
+                DrawTexture(bestTo10, 274, 113, WHITE);
+            }
+
+            if (IsKeyDown(KEY_BACKSPACE))
+            {
+                PlaySound(select);
+                state = "menu";
+            }
+
+            if (IsKeyDown(KEY_LEFT))
+            {
+                bestTo = 3;
+            }
+            else if (IsKeyDown(KEY_RIGHT))
+            {
+                bestTo = 10;
+            }
+        }
+        else if (state == "win1")
+        {
+            Texture2D backGround = LoadTexture("assets/images/backGround.png");
+            DrawTexture(backGround, -16, -19, WHITE);
+            Texture2D plr1Win = LoadTexture("assets/images/titleStuff/plr1Win.png");
+            DrawTexture(plr1Win, 27, 109, WHITE);
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                PlaySound(select);
+                playerInfo.score = 0;
+                playerinfo2.score = 0;
+                state = "menu";
+            }
+        }
+        else if (state == "win2")
+        {
+            Texture2D backGround = LoadTexture("assets/images/backGround.png");
+            DrawTexture(backGround, -16, -19, WHITE);
+            Texture2D plr2Win = LoadTexture("assets/images/titleStuff/plr2Win.png");
+            DrawTexture(plr2Win, 27, 109, WHITE);
+
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                PlaySound(select);
+                playerInfo.score = 0;
+                playerinfo2.score = 0;
+                state = "menu";
+            }
+        }
+        else if (state == "credits")
+        {
+            Texture2D backGround = LoadTexture("assets/images/backGround.png");
+            DrawTexture(backGround, -16, -19, WHITE);
+            Texture2D creditsYEE = LoadTexture("assets/images/titleStuff/credits.png");
+            DrawTexture(creditsYEE, 31, 14, WHITE);
+
+            if (IsKeyPressed(KEY_BACKSPACE))
+            {
+                PlaySound(select);
                 state = "menu";
             }
         }

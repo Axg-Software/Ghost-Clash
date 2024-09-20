@@ -1,11 +1,19 @@
 # Ghost clash changelog
 Writen by [Axuko](https://github.com/Ethan-makes-music)
 
+## V1.1 - 9-20-24
+### Added
+- Options menu
+- A win state that shows who won depending on score
+- In the options menu you are able to set it to: Best to 3, First to 10 etc
+- A credits menu you can access by pressing 'C' in the menu
+
 ## V1.0 (FULL RELEASE!) - 9-13-24
 ### Added
 - Full deathscreen
 - Different death screens depending on who dies
 - Sound effects
+- Music - IN PROGESS (by sami) (TODO)
 - Make bullets face any direction
 - Added Score
 ### Changed
