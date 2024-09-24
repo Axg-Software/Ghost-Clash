@@ -18,8 +18,8 @@ Engine im using: Raylib.
 
 Name for the game: Ghost Clash.
 
-Percent complete: 60%.
+Percent complete: 100%.
 
 ## Credits
 - Axuko: Coding, Art, Sfx
-- SamiCLN: Music
+- Jenfkejl: Music
