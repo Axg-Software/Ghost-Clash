@@ -197,7 +197,7 @@ int main ()
     bool shot2 = false;
     std::string state = "menu";
 
-    InitWindow(screenWidth, screenHeight, "Ghost Clash V1.1"); // Idk fully about the name yet but we will see :)
+    InitWindow(screenWidth, screenHeight, "Ghost Clash V1.1.1"); // Idk fully about the name yet but we will see :)
     InitAudioDevice();
 
     Sound select = LoadSound("assets/sounds/pickupCoin.wav");
@@ -267,7 +267,7 @@ int main ()
             DrawText(TextFormat("Plr1 Score: %i", playerInfo.score), 30, 0, 32, BLACK);
             DrawText(TextFormat("Plr 2 Score: %i", playerinfo2.score), 270, 0, 32, BLACK);
 
-            if (IsKeyPressed(KEY_LEFT_SHIFT))
+            if (IsKeyPressed(KEY_LEFT_SHIFT) && player1paddles.active == false)
             {
                 shot = true;
                 PlaySound(shoot);
@@ -289,7 +289,7 @@ int main ()
             }
 
             // Player two shooting
-            if (IsKeyPressed(KEY_RIGHT_SHIFT))
+            if (IsKeyPressed(KEY_RIGHT_SHIFT) && player2paddles.active == false)
             {
                 shot2 = true;
                 PlaySound(shoot);
