@@ -3,7 +3,7 @@ Writen by [Axuko](https://github.com/Ethan-makes-music)
 
 ## V1.1.1 - 9-29-24
 ### Changed
-- You can NOT shoot bullets while using your paddles (TODO)
+- You can NOT shoot bullets while using your paddles
 
 ## V1.1 - 9-20-24
 ### Added
